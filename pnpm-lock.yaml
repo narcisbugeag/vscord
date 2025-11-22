@@ -12,8 +12,8 @@ importers:
         specifier: ~22.15.35
         version: 22.15.35
       '@types/vscode':
-        specifier: 1.14.0
-        version: 1.14.0
+        specifier: 1.52.0
+        version: 1.52.0
       '@vscode/vsce':
         specifier: ^3.7.0
         version: 3.7.0
@@ -358,8 +358,8 @@ packages:
   '@types/sarif@2.1.7':
     resolution: {integrity: sha512-kRz0VEkJqWLf1LLVN4pT1cg1Z9wAuvI6L97V3m2f5B76Tg8d413ddvLBPTEHAZJlnn4XSvu0FkZtViCQGVyrXQ==}
 
-  '@types/vscode@1.14.0':
-    resolution: {integrity: sha512-0PFarl1nOck6V+vTMycb7b3mrc2ybDkkg3bA8u/8DUyY0/KhYUw3qxCQjxT2c66ferlpOeA05ETgddSmup69fA==}
+  '@types/vscode@1.52.0':
+    resolution: {integrity: sha512-Kt3bvWzAvvF/WH9YEcrCICDp0Z7aHhJGhLJ1BxeyNP6yRjonWqWnAIh35/pXAjswAnWOABrYlF7SwXR9+1nnLA==}
 
   '@typespec/ts-http-runtime@0.3.2':
     resolution: {integrity: sha512-IlqQ/Gv22xUC1r/WQm4StLkYQmaaTsXAhUVsNE0+xiyf0yRFiH5++q78U3bw6bLKDCTmh0uqKB9eG9+Bt75Dkg==}
@@ -1956,7 +1956,7 @@ snapshots:
 
   '@types/sarif@2.1.7': {}
 
-  '@types/vscode@1.14.0': {}
+  '@types/vscode@1.52.0': {}
 
   '@typespec/ts-http-runtime@0.3.2':
     dependencies:
