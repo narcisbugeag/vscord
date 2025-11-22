@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type ConfigurationTarget, StatusBarAlignment, type WorkspaceConfiguration, workspace } from "vscode";
+import { type ConfigurationTarget, type WorkspaceConfiguration, workspace } from "vscode";
 import { type PROBLEM_LEVEL } from "./activity";
 
 export type FileSizeStandard = "iec" | "jedec";
@@ -111,7 +111,7 @@ export interface ExtensionConfigurationType {
     "behaviour.additionalFileMapping": Record<string, string>;
     "behaviour.suppressNotifications": boolean;
     "behaviour.suppressRpcCouldNotConnect": boolean;
-    "behaviour.statusBarAlignment": StatusBarAlignment;
+    "behaviour.statusBarAlignment": "Right" | "Left";
     "behaviour.debug": boolean;
 }
 

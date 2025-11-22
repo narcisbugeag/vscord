@@ -13,9 +13,9 @@ export enum StatusBarMode {
 class EditorController implements Disposable {
     statusBarItem = window.createStatusBarItem(this.#getAlignmentFromConfig(getConfig()));
 
-    #getAlignmentFromConfig(config: ExtensionConfiguration) {
+    #getAlignmentFromConfig(config: ExtensionConfiguration): StatusBarAlignment {
         const value = config.get(CONFIG_KEYS.Behaviour.StatusBarAlignment);
-        return value ?? StatusBarAlignment.Left;
+        return StatusBarAlignment[value ?? "Right"];
     }
 
     setStatusBarItem(mode: StatusBarMode) {
@@ -49,11 +49,15 @@ class EditorController implements Disposable {
         statusBarItem.show();
     }
 
-    toggleStatusBarAlignment(align: StatusBarAlignment = StatusBarAlignment.Left): StatusBarAlignment {
+    toggleStatusBarAlignment(align: StatusBarAlignment = StatusBarAlignment.Right): StatusBarAlignment {
         const config = getConfig();
         const cfgKey = CONFIG_KEYS.Behaviour.StatusBarAlignment;
+        const literalAlign = (
+            align === StatusBarAlignment.Right ? "Right" : "Left"
+        ) satisfies ExtensionConfigurationType[typeof cfgKey];
 
-        config.update(cfgKey, align satisfies ExtensionConfigurationType[typeof cfgKey]);
+        config.update(cfgKey, literalAlign);
+        // updateStatusBarFromConfig() // called from config listener
         return align;
     }
 
