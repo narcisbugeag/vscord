@@ -38,9 +38,14 @@
     "package": "pnpm run check-types && pnpm dlx rolldown -c rolldown.config.ts --production",
     "check-types": "tsc --noEmit"
   },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.3.0",
+    "discord-api-types": "^0.38.34",
+    "filesize": "^11.0.13"
+  },
   "devDependencies": {
     "@types/node": "~22.19.1",
-    "@types/vscode": "^1.106.1",
+    "@types/vscode": "^1.52.0",
     "npm-run-all": "^4.1.5",
     "rolldown": "1.0.0-beta.51",
     "typescript": "^5.9.3"
@@ -50,7 +55,7 @@
   },
   "config": {},
   "engines": {
-    "vscode": "^1.106.1"
+    "vscode": "^1.52.0"
   },
   "packageManager": "pnpm@10.23.0"
 }

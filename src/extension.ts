@@ -34,6 +34,14 @@ export class Extension extends Disposable {
     // Temporary debug code
     setInterval(() => {
       this.logger.debug(
+        "file name ->",
+        this.providerManager.resolveVariable("file_name")
+      );
+            this.logger.debug(
+        "language id ->",
+        this.providerManager.resolveVariable("language_id")
+      );
+      this.logger.debug(
         "is git ok?",
         this.providerManager.resolveVariable("git_ok")
       );
@@ -41,7 +49,6 @@ export class Extension extends Disposable {
         "unknown value",
         this.providerManager.resolveVariable("gserersthiuwaerhuiarwehu")
       );
-      this.logger.debug(window.activeNotebookEditor);
     }, 1000);
   }
 

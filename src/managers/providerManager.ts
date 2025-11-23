@@ -22,12 +22,6 @@ export class ProviderManager extends Base {
 
   public resolveVariable(name: string): string | undefined {
     for (const provider of this.providers) {
-      this.extension.logger.debug(
-        `Searching variable \`${name}\`, trying ${provider.id}`
-      );
-      this.extension.logger.debug(
-        `${provider.id}'s should skip -> ${provider.shouldSkip()}`
-      );
       if (provider.shouldSkip()) continue;
       if (!provider.hasVariable(name)) continue;
       const value = provider.resolveVariable(name);

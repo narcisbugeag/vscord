@@ -16,6 +16,7 @@ export class Provider extends Base {
     public supportLang = false
   ) {
     super(extension);
+    this.registerVariables();
   }
 
   public subscribe() {
@@ -33,6 +34,8 @@ export class Provider extends Base {
   public resolveVariable(name: string): string | undefined {
     return this.variables.has(name) ? this.variables.get(name)!() : undefined;
   }
+
+  protected registerVariables() {}
 
   protected provide(name: string, value: () => string | undefined) {
     this.variables.set(name, value);
