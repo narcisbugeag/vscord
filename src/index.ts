@@ -4,9 +4,9 @@ import * as vscode from "vscode";
 export const extension = new Extension();
 
 export function activate(ctx: vscode.ExtensionContext) {
-  extension.activate(ctx);
+    extension.activate(ctx);
 }
 
 export function deactivate() {
-  extension.deactivate();
+    extension.deactivate();
 }

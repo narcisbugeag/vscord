@@ -1,49 +1,49 @@
 name: Continuous Delivery
 
 on:
-  push:
-    tags:
-      - "*"
+    push:
+        tags:
+            - "*"
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Project
-        uses: actions/checkout@v6
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Project
+              uses: actions/checkout@v6
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
+            - name: Use Node.js 22
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 22
 
-      - uses: pnpm/action-setup@v4
-        with:
-          run_install: false
+            - uses: pnpm/action-setup@v4
+              with:
+                  run_install: false
 
-      - name: Get pnpm store directory
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+            - name: Get pnpm store directory
+              run: |
+                  echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            - uses: actions/cache@v4
+              name: Setup pnpm cache
+              with:
+                  path: ${{ env.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-store-
 
-      - run: pnpm install --frozen-lockfile
+            - run: pnpm install --frozen-lockfile
 
-      - name: Publish to Open VSX Registry
-        uses: HaaLeo/publish-vscode-extension@v2
-        id: publishToOpenVSX
-        with:
-          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+            - name: Publish to Open VSX Registry
+              uses: HaaLeo/publish-vscode-extension@v2
+              id: publishToOpenVSX
+              with:
+                  pat: ${{ secrets.OPEN_VSX_TOKEN }}
 
-      - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v2
-        with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
-          extensionFile: ${{ steps.publishToOpenVSX.outputs.vsixPath }}
+            - name: Publish to Visual Studio Marketplace
+              uses: HaaLeo/publish-vscode-extension@v2
+              with:
+                  pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+                  registryUrl: https://marketplace.visualstudio.com
+                  extensionFile: ${{ steps.publishToOpenVSX.outputs.vsixPath }}

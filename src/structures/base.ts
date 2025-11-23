@@ -1,5 +1,5 @@
 import { Extension } from "../extension";
 
 export class Base {
-  constructor(public extension: Extension) {}
+    constructor(public extension: Extension) {}
 }

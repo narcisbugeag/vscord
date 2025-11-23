@@ -1,61 +1,84 @@
 {
-  "name": "vscord",
-  "displayName": "VSCord",
-  "description": "Highly customizable Discord Rich Presence extension for Visual Studio Code",
-  "version": "6.0.0",
-  "repository": "github:LeonardSSH/vscord",
-  "publisher": "LeonardSSH",
-  "contributors": [
-    "xhayper"
-  ],
-  "license": "MIT",
-  "private": true,
-  "icon": "assets/icon.png",
-  "bugs": {
-    "url": "https://github.com/LeonardSSH/vscord/issues"
-  },
-  "homepage": "https://github.com/LeonardSSH/vscord#readme",
-  "keywords": [
-    "discord",
-    "rich",
-    "presence",
-    "rich presence",
-    "rpc"
-  ],
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./dist/index.js",
-  "scripts": {
-    "vscode:prepublish": "pnpm run package",
-    "compile": "pnpm run check-types && pnpm dlx rolldown -c rolldown.config.ts",
-    "watch": "npm-run-all -p watch:*",
-    "watch:rolldown": "pnpm dlx rolldown -c rolldown.config.ts --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "pnpm run check-types && pnpm dlx rolldown -c rolldown.config.ts --production",
-    "check-types": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@xhayper/discord-rpc": "^1.3.0",
-    "discord-api-types": "^0.38.34",
-    "filesize": "^11.0.13"
-  },
-  "devDependencies": {
-    "@types/node": "~22.19.1",
-    "@types/vscode": "^1.52.0",
-    "npm-run-all": "^4.1.5",
-    "rolldown": "1.0.0-beta.51",
-    "typescript": "^5.9.3"
-  },
-  "contributes": {
-    "commands": []
-  },
-  "config": {},
-  "engines": {
-    "vscode": "^1.52.0"
-  },
-  "packageManager": "pnpm@10.23.0"
+    "name": "vscord",
+    "displayName": "VSCord",
+    "description": "Highly customizable Discord Rich Presence extension for Visual Studio Code",
+    "version": "6.0.0",
+    "repository": "github:LeonardSSH/vscord",
+    "publisher": "LeonardSSH",
+    "contributors": [
+        "xhayper"
+    ],
+    "license": "MIT",
+    "private": true,
+    "icon": "assets/icon.png",
+    "bugs": {
+        "url": "https://github.com/LeonardSSH/vscord/issues"
+    },
+    "homepage": "https://github.com/LeonardSSH/vscord#readme",
+    "keywords": [
+        "discord",
+        "rich",
+        "presence",
+        "rich presence",
+        "rpc"
+    ],
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./dist/index.js",
+    "scripts": {
+        "vscode:prepublish": "pnpm run package",
+        "compile": "pnpm run check-types && pnpm dlx rolldown -c rolldown.config.ts",
+        "watch": "npm-run-all -p watch:*",
+        "watch:rolldown": "pnpm dlx rolldown -c rolldown.config.ts --watch",
+        "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+        "package": "pnpm run check-types && pnpm dlx rolldown -c rolldown.config.ts --production",
+        "check-types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@xhayper/discord-rpc": "^1.3.0",
+        "discord-api-types": "^0.38.34",
+        "filesize": "^11.0.13"
+    },
+    "devDependencies": {
+        "@types/node": "~22.19.1",
+        "@types/vscode": "^1.52.0",
+        "npm-run-all": "^4.1.5",
+        "rolldown": "1.0.0-beta.51",
+        "typescript": "^5.9.3"
+    },
+    "contributes": {
+        "commands": [
+            {
+                "category": "VSCord",
+                "title": "Enable Discord Presence",
+                "command": "vscord.enable"
+            },
+            {
+                "category": "VSCord",
+                "title": "Disable Discord Presence",
+                "command": "vscord.disable"
+            }
+        ],
+        "configuration": [
+            {
+                "title": "VSCord",
+                "properties": {
+                    "vscord.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "order": 1,
+                        "description": "Is the extension enabled?"
+                    }
+                }
+            }
+        ]
+    },
+    "engines": {
+        "vscode": "^1.52.0"
+    },
+    "packageManager": "pnpm@10.23.0"
 }
