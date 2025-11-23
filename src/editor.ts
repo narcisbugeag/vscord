@@ -14,10 +14,9 @@ class EditorController implements Disposable {
     statusBarItem: StatusBarItem | undefined;
     statusBarItemMode: StatusBarMode = StatusBarMode.Disabled;
 
-    #getAlignmentFromConfig(config: ExtensionConfiguration) {
+    #getAlignmentFromConfig(config: ExtensionConfiguration): StatusBarAlignment {
         const value = config.get(CONFIG_KEYS.Behaviour.StatusBarAlignment);
-        const isRight = value === "Right";
-        return isRight ? StatusBarAlignment.Right : StatusBarAlignment.Left;
+        return StatusBarAlignment[value ?? "Right"];
     }
 
     setStatusBarItem(mode: StatusBarMode) {
@@ -59,13 +58,16 @@ class EditorController implements Disposable {
         this.statusBarItem.show();
     }
 
-    toggleStatusBarAlignment(onLeft?: boolean) {
+    toggleStatusBarAlignment(align: StatusBarAlignment = StatusBarAlignment.Right): StatusBarAlignment {
         const config = getConfig();
         const cfgKey = CONFIG_KEYS.Behaviour.StatusBarAlignment;
-        const alignment = (onLeft ?? config.get(cfgKey) === "Right") ? "Left" : "Right";
+        const literalAlign = (
+            align === StatusBarAlignment.Right ? "Right" : "Left"
+        ) satisfies ExtensionConfigurationType[typeof cfgKey];
 
-        config.update(cfgKey, alignment satisfies ExtensionConfigurationType[typeof cfgKey]);
-        return alignment;
+        config.update(cfgKey, literalAlign);
+        // updateStatusBarFromConfig() // called from config listener
+        return align;
     }
 
     updateStatusBarFromConfig() {
@@ -86,6 +88,13 @@ class EditorController implements Disposable {
 
         // Change unchangable: alignment/priority
         this.statusBarItem = window.createStatusBarItem(alignment, priority);
+        //#region copy
+        this.statusBarItem.text = old.text;
+        this.statusBarItem.tooltip = old.tooltip;
+        this.statusBarItem.color = old.color;
+        this.statusBarItem.command = old.command;
+        this.statusBarItem.accessibilityInformation = old.accessibilityInformation;
+        //#endregion
 
         this.statusBarItem.show();
         old.dispose();

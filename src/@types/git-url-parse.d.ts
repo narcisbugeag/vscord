@@ -5,7 +5,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 declare module "git-url-parse" {
-    declare namespace gitUrlParse {
+    namespace gitUrlParse {
         type GitProtocol = "ssh" | "git" | "ftp" | "ftps" | "http" | "https" | (string & Record<never, never>);
         type FilePathType = "raw" | "src" | "blob" | "tree" | "edit" | (string & Record<never, never>);
 
@@ -71,7 +71,7 @@ declare module "git-url-parse" {
      * @param url - The Git url to parse.
      * @return The `GitUrl` object.
      */
-    declare function gitUrlParse(url: string): gitUrlParse.GitUrl;
+    function gitUrlParse(url: string): gitUrlParse.GitUrl;
 
     export = gitUrlParse;
 }

@@ -42,17 +42,20 @@
         "vscode:prepublish": "pnpm tsdown",
         "package": "pnpm vsce package --no-yarn",
         "watch": "pnpm tsdown --watch",
+        "check": "pnpm tsc --noEmit",
         "lint": "pnpm prettier . --check",
         "lint:fix": "pnpm prettier . --write"
     },
     "devDependencies": {
         "@types/node": "~22.15.35",
+        "@types/normalize-url": "^4.2.0",
         "@types/vscode": "1.52.0",
         "@vscode/vsce": "^3.7.0",
         "@xhayper/discord-rpc": "^1.3.0",
         "discord-api-types": "^0.38.34",
         "filesize": "^11.0.13",
         "git-url-parse": "^16.1.0",
+        "prettier": "^3.6.2",
         "tsdown": "^0.16.6",
         "typescript": "^5.9.3"
     },

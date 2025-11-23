@@ -35,9 +35,17 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Check types
+        run: |
+          pnpm run check
+
+      - name: Check style
+        run: |
+          pnpm run lint
+
       - name: Build
         run: |
-          pnpm package
+          pnpm run package
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
