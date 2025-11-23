@@ -1,6 +1,6 @@
 import { LanguageProvider } from "./providers/languageProvider";
 import { JupyterProvider } from "./providers/jupyterProvider";
-import { type ExtensionContext, Disposable } from "vscode";
+import { type ExtensionContext, Disposable, window } from "vscode";
 import { FileProvider } from "./providers/fileProvider";
 import { GitProvider } from "./providers/gitProvider";
 import { Provider } from "./providers/provider";
@@ -31,9 +31,18 @@ export class Extension extends Disposable {
     this.logger.info("VSCord is activated!");
     this.activated = true;
 
+    // Temporary debug code
     setInterval(() => {
-      this.logger.info("is git ok?", this.providerManager.resolveVariable("git_ok"))
-    }, 1000)
+      this.logger.debug(
+        "is git ok?",
+        this.providerManager.resolveVariable("git_ok")
+      );
+      this.logger.debug(
+        "unknown value",
+        this.providerManager.resolveVariable("gserersthiuwaerhuiarwehu")
+      );
+      this.logger.debug(window.activeNotebookEditor);
+    }, 1000);
   }
 
   public deactivate() {
