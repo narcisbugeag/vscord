@@ -182,6 +182,7 @@ export const registerCommands = (ctx: ExtensionContext) => {
 
 export async function activate(ctx: ExtensionContext) {
     logInfo("Discord Rich Presence for VS Code activated.");
+    editor.setStatusBarItem(StatusBarMode.Pending);
     registerCommands(ctx);
     registerListeners(ctx);
 
