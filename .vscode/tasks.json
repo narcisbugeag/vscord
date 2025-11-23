@@ -1,17 +1,17 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "watch:debug",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"isBackground": true,
-			"problemMatcher": ["$tsc-watch"],
-			"label": "pnpm: watch:debug",
-			"detail": "pnpm tsc --watch"
-		}
-	]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "watch:debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "problemMatcher": ["$tsc-watch"],
+            "label": "pnpm: watch:debug",
+            "detail": "pnpm tsc --watch"
+        }
+    ]
 }
