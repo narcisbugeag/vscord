@@ -1,4 +1,4 @@
-import { type ExtensionContext, commands, Disposable, extensions, workspace } from "vscode";
+import { type ExtensionContext, Disposable, commands, extensions, workspace } from "vscode";
 import { LanguageProvider } from "./providers/languageProvider";
 import { JupyterProvider } from "./providers/jupyterProvider";
 import { ProviderManager } from "./managers/providerManager";
@@ -6,15 +6,11 @@ import { FileProvider } from "./providers/fileProvider";
 import { GitProvider } from "./providers/gitProvider";
 import { Logger } from "./structures/logger";
 
-const getConfig = () => workspace.getConfiguration("vscord");
-
 export class Extension extends Disposable {
     providerManager = new ProviderManager(this);
     context: ExtensionContext | undefined;
     logger = new Logger(this);
-    public get config() {
-        return getConfig();
-    }
+    config = workspace.getConfiguration("vscord");
 
     activated = false;
 
@@ -44,6 +40,7 @@ export class Extension extends Disposable {
 
         [
             workspace.onDidChangeConfiguration(() => {
+                this.config = workspace.getConfiguration("vscord");
                 // TODO: Call update to RPC
 
                 if (!this.config.get<boolean>("enabled", true)) {
