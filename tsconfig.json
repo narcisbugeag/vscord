@@ -1,30 +1,15 @@
 {
-    "compilerOptions": {
-        /* Visit https://aka.ms/tsconfig to read more about this file */
-
-        /* Language and Environment */
-        "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-        "moduleDetection": "legacy" /* Control what method is used to detect module-format JS files. */,
-        // "resolveJsonModule": true,                        /* Enable importing .json files. */
-
-        /* Modules */
-        "module": "NodeNext" /* Specify what module code is generated. */,
-        "moduleResolution": "nodenext" /* Specify how TypeScript looks up a file from a given module specifier. */,
-        "resolveJsonModule": true /* Enable importing .json files. */,
-
-        /* Emit */
-        "sourceMap": true /* Create source map files for emitted JavaScript files. */,
-        "outDir": "./dist" /* Specify an output folder for all emitted files. */,
-
-        /* Interop Constraints */
-        "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
-        "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-
-        /* Type Checking */
-        "strict": true /* Enable all strict type-checking options. */,
-
-        /* Completeness */
-        "skipLibCheck": true /* Skip type checking all .d.ts files. */
-    },
-    "include": ["src"]
+  "compilerOptions": {
+    "module": "node16",
+    "target": "es2022",
+    "lib": ["ES2022"],
+    "sourceMap": true,
+    "rootDir": "src",
+    "strict": true /* enable all strict type-checking options */
+    /* Additional Checks */
+    // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
+    // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
+    // "noUnusedParameters": true,  /* Report errors on unused parameters. */
+  },
+  "exclude": ["rolldown.config.ts"]
 }
