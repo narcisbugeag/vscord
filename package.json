@@ -3,7 +3,7 @@
     "displayName": "Discord Rich Presence",
     "version": "5.3.8",
     "description": "Highly customizable Discord Rich Presence extension for Visual Studio Code",
-    "main": "dist/extension.cjs",
+    "main": "dist/extension.js",
     "repository": "github:LeonardSSH/vscord",
     "publisher": "LeonardSSH",
     "contributors": [
@@ -42,6 +42,7 @@
         "vscode:prepublish": "pnpm tsdown",
         "package": "pnpm vsce package --no-yarn",
         "watch": "pnpm tsdown --watch",
+        "watch:debug": "pnpm tsc --watch",
         "check": "pnpm tsc --noEmit",
         "lint": "pnpm prettier . --check",
         "lint:fix": "pnpm prettier . --write"

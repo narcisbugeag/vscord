@@ -6,5 +6,6 @@ export default defineConfig({
     format: "cjs",
     entry: ["src/extension.ts"],
     external: ["vscode"],
+    fixedExtension: false,
     minify: true
 });
