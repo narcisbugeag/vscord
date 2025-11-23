@@ -26,7 +26,7 @@ export class GitProvider extends ExtensionBasedProvider {
   private get gitURL() {
     const remotes = this.currentRepository?.state.remotes ?? [];
     const remote = remotes.filter((r) => r.name === "origin")[0];
-    return remote ? (remote.fetchUrl ?? remote.pushUrl) : undefined;
+    return remote ? remote.fetchUrl ?? remote.pushUrl : undefined;
   }
 
   constructor(extension: Extension) {
@@ -41,6 +41,10 @@ export class GitProvider extends ExtensionBasedProvider {
   }
 
   public override shouldSkip(): boolean {
-    return this.gitApi?.state !== "initialized" || !this.currentRepository;
+    return (
+      super.shouldSkip() ||
+      this.gitApi?.state !== "initialized" ||
+      !this.currentRepository
+    );
   }
 }
