@@ -30,6 +30,10 @@ export class Extension extends Disposable {
     this.providerManager.subscribe();
     this.logger.info("VSCord is activated!");
     this.activated = true;
+
+    setInterval(() => {
+      this.logger.info("is git ok?", this.providerManager.resolveVariable("git_ok"))
+    }, 1000)
   }
 
   public deactivate() {

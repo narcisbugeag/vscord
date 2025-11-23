@@ -1,7 +1,7 @@
+import { NotebookBasedProvider } from "./notebookBasedProvider";
 import { Extension } from "../extension";
-import { Provider } from "./provider";
 
-export class JupyterProvider extends Provider {
+export class JupyterProvider extends NotebookBasedProvider {
     constructor(extension: Extension) {
         super(extension, "jupyter", 1)
     }

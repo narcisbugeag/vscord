@@ -1,6 +1,5 @@
 import { Base } from "../structures/base";
 import { Extension } from "../extension";
-import { workspace } from "vscode";
 
 /**
  * Provider is the main way for VSCord to figure out what variable name corospond to what
@@ -23,10 +22,6 @@ export class Provider extends Base {
     return;
   }
 
-  public getLanguage(): string | undefined {
-    return;
-  }
-
   public shouldSkip(): boolean {
     return true;
   }
@@ -35,7 +30,11 @@ export class Provider extends Base {
     return this.variables.has(name);
   }
 
-  private provide(name: string, value: () => string | undefined) {
+  public resolveVariable(name: string): string | undefined {
+    return this.variables.has(name) ? this.variables.get(name)!() : undefined;
+  }
+
+  protected provide(name: string, value: () => string | undefined) {
     this.variables.set(name, value);
   }
 }
