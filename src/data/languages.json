@@ -77,6 +77,10 @@
             "image": "docker"
         },
         {
+            "language": "ejs",
+            "image": "ejs"
+        },
+        {
             "language": "fortran",
             "image": "fortran"
         },
