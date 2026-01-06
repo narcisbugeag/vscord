@@ -159,15 +159,22 @@ export class Data implements Disposable {
         return v;
     }
 
+    #lastValidGitRemoteUrl = "";
+
     public get gitRemoteUrl(): gitUrlParse.GitUrl | undefined {
-        this.debug(`gitRemoteUrl(): Remote: ${this._remote}`);
         const v = stripCredential(this._remote?.fetchUrl ?? this._remote?.pushUrl ?? "");
-        this.debug(`gitRemoteUrl(): Url: ${v ?? ""}`);
         if (!v) return;
 
-        logInfo(`gitRemoteUrl(): Parsed: ${JSON.stringify(gitUrlParse(v), null, 2)}`);
+        const parsed = gitUrlParse(v);
 
-        return gitUrlParse(v);
+        if (this.#lastValidGitRemoteUrl !== v) {
+            this.#lastValidGitRemoteUrl = v;
+            this.debug(`gitRemoteUrl(): Remote: ${this._remote}`);
+            this.debug(`gitRemoteUrl(): Url: ${v ?? ""}`);
+            logInfo(`gitRemoteUrl(): Parsed: ${JSON.stringify(parsed, null, 2)}`);
+        }
+
+        return parsed;
     }
 
     public get gitBranchName(): string | undefined {

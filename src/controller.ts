@@ -72,33 +72,38 @@ export class RPCController {
     private listen() {
         const config = getConfig();
 
-        const sendActivity = (isViewing = false, isIdling = false) => {
-            this.activityThrottle.reset();
-            void this.sendActivity(isViewing, isIdling);
-        };
-
-        const fileSwitch = window.onDidChangeActiveTextEditor(() => {
+        const fileSwitch = window.onDidChangeActiveTextEditor((e) => {
             logInfo("onDidChangeActiveTextEditor()");
-            sendActivity(true);
+            if (e) {
+                this.activityThrottle.reset();
+                void this.activityThrottle.callable();
+                return;
+            }
+            setTimeout(() => {
+                this.checkIdle(window.state);
+            }, 500);
         });
         const fileEdit = workspace.onDidChangeTextDocument((e) => {
             if (e.document !== dataClass.editor?.document) return;
             logInfo("onDidChangeTextDocument()");
-            dataClass.updateGitInfo();
+            this.activityThrottle.reset();
             void this.activityThrottle.callable();
         });
         const fileSelectionChanged = window.onDidChangeTextEditorSelection((e) => {
             if (e.textEditor !== dataClass.editor) return;
             logInfo("onDidChangeTextEditorSelection()");
-            dataClass.updateGitInfo();
+            this.activityThrottle.reset();
             void this.activityThrottle.callable();
         });
-        const debugStart = debug.onDidStartDebugSession(() => sendActivity());
-        const debugEnd = debug.onDidTerminateDebugSession(() => sendActivity());
+        const debugStart = debug.onDidStartDebugSession(() => {
+            void this.activityThrottle.callable();
+        });
+        const debugEnd = debug.onDidTerminateDebugSession(() => {
+            void this.activityThrottle.callable();
+        });
         const diagnosticsChange = languages.onDidChangeDiagnostics(() => onDiagnosticsChange());
         const changeWindowState = window.onDidChangeWindowState((e: WindowState) => {
             logInfo("onDidChangeWindowState()");
-            dataClass.updateGitInfo();
             this.checkIdle(e);
         });
 
@@ -127,7 +132,7 @@ export class RPCController {
         return (this.canSendActivity = true);
     }
 
-    private async checkIdle(windowState: WindowState) {
+    private checkIdle(windowState: WindowState) {
         if (!this.enabled) return;
 
         const config = getConfig();
@@ -135,7 +140,7 @@ export class RPCController {
         if (config.get(CONFIG_KEYS.Status.Idle.Timeout) !== 0) {
             if (windowState.focused && this.idleTimeout) {
                 clearTimeout(this.idleTimeout);
-                await this.sendActivity();
+                void this.activityThrottle.callable();
             } else if (config.get(CONFIG_KEYS.Status.Idle.Check)) {
                 this.idleTimeout = setTimeout(
                     async () => {
@@ -150,8 +155,7 @@ export class RPCController {
 
                         if (!this.enabled) return;
 
-                        this.activityThrottle.reset();
-                        await this.sendActivity(false, true);
+                        void this.activityThrottle.callable(false, true);
                     },
                     config.get(CONFIG_KEYS.Status.Idle.Timeout)! * 1000
                 );
@@ -220,7 +224,7 @@ export class RPCController {
         editor.setStatusBarItem(StatusBarMode.Succeeded);
 
         logInfo("[004] Debug:", "Enabled - isConnected", this.client.isConnected, "isReady", this.client.clientId);
-        await this.sendActivity();
+        await this.activityThrottle.callable();
         this.cleanUp();
         this.listen();
 

@@ -35,7 +35,8 @@
     "activationEvents": [
         "onStartupFinished"
     ],
-    "main": "dist/extension.js",
+    "main": "dist/extension.cjs",
+    "type": "module",
     "private": true,
     "icon": "assets/icon.png",
     "scripts": {
