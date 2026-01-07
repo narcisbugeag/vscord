@@ -1,7 +1,7 @@
-/* AUTO-GENERATED FILE
- * DO NOT EDIT MANUALLY
- * Generated from package.json contributes.configuration
- */
+// AUTO-GENERATED FILE
+// DO NOT EDIT MANUALLY
+// Edit package.json instead and re-run/edit configtypes.js to update
+// Generated from package.json contributes.configuration
 
 export type ExtensionConfigGenerated = {
     "vscord.enable": boolean;

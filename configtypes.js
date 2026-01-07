@@ -1,7 +1,7 @@
 const fs = require("fs"); // should be changed to import
 const path = require("path");
 
-const ROOT = process.cwd();
+const ROOT = __dirname; // import.meta.dirname
 const PACKAGE_JSON = path.join(ROOT, "package.json");
 const OUT_FILE = path.join(ROOT, "src", "configtype.ts");
 const OUT_FILE_REL = path.relative(ROOT, OUT_FILE);
@@ -72,10 +72,10 @@ for (const block of configurations) {
     }
 }
 
-const output = `/* AUTO-GENERATED FILE
- * DO NOT EDIT MANUALLY
- * Generated from package.json contributes.configuration
- */
+const output = `// AUTO-GENERATED FILE
+// DO NOT EDIT MANUALLY
+// Edit package.json instead and re-run/edit configtypes.js to update
+// Generated from package.json contributes.configuration
 
 export type ExtensionConfigGenerated = {
 ${activeEntries.join("\n")}
@@ -91,7 +91,8 @@ fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
 if (process.argv.includes("--check")) {
     const existing = fs.existsSync(OUT_FILE) ? fs.readFileSync(OUT_FILE, "utf8") : null;
     if (existing !== output) {
-        console.log("configtypes.js: OUT OF DATE. Regenerate by running 'node configtypes.js'", OUT_FILE_REL);
+        console.log("%s: OUT OF DATE.", OUT_FILE_REL);
+        console.log("Regenerate by running 'node configtypes.js' or edit the generator script.");
         process.exit(1);
     }
     console.log("checked", OUT_FILE_REL);
