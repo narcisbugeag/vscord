@@ -1,4 +1,4 @@
-import type { ExtensionConfigGenerated } from "./configtype";
+import type { ExtensionConfigGenerated } from "./@types/configtypes.d.ts";
 import { Disposable, ConfigurationTarget, StatusBarAlignment, StatusBarItem, window, commands } from "vscode";
 import { type ExtensionConfiguration, getConfig } from "./config";
 import { logInfo, outputChannel } from "./logger";

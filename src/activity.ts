@@ -1,5 +1,5 @@
 import type { SetActivity } from "@xhayper/discord-rpc";
-import type { ExtensionConfigGenerated } from "./configtype";
+import type { ExtensionConfigGenerated } from "./@types/configtypes.d.ts";
 import type { GatewayActivityButton } from "discord-api-types/v10";
 import { resolveLangName, toLower, toTitle, toUpper, getArticle } from "./helpers/resolveLangName";
 import { FAKE_EMPTY } from "./constants";

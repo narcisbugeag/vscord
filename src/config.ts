@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ConfigurationTarget, type WorkspaceConfiguration, workspace } from "vscode";
-import type { ExtensionConfigGenerated } from "./configtype";
+import type { ExtensionConfigGenerated } from "./@types/configtypes.d.ts";
 
 export type FileSizeStandard = "iec" | "jedec";
 

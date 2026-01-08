@@ -3,7 +3,7 @@ const path = require("path");
 
 const ROOT = __dirname; // import.meta.dirname
 const PACKAGE_JSON = path.join(ROOT, "package.json");
-const OUT_FILE = path.join(ROOT, "src", "configtype.ts");
+const OUT_FILE = path.join(ROOT, "src", "@types", "configtypes.d.ts");
 const OUT_FILE_REL = path.relative(ROOT, OUT_FILE);
 
 const pkg = JSON.parse(fs.readFileSync(PACKAGE_JSON, "utf8"));
