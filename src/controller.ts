@@ -7,7 +7,6 @@ import { StatusBarMode, editor } from "./editor";
 import { validURL } from "./helpers/validURL";
 import { throttle } from "./helpers/throttle";
 import { logError, logInfo } from "./logger";
-import { CONFIG_KEYS } from "./constants";
 import { getConfig } from "./config";
 import { dataClass } from "./data";
 
@@ -33,7 +32,7 @@ export class RPCController {
         const config = getConfig();
         this.client = new Client({ clientId });
         this.debug = debug;
-        this.manualIdleMode = config.get(CONFIG_KEYS.Status.Idle.Check) === false;
+        this.manualIdleMode = config.get("vscord.status.idle.check") === false;
 
         editor.setStatusBarItem(StatusBarMode.Pending);
 
@@ -105,8 +104,8 @@ export class RPCController {
         // fire checkIdle at least once after loading
         this.checkIdle(window.state);
 
-        if (config.get(CONFIG_KEYS.Status.Problems.Enabled)) this.listeners.push(diagnosticsChange);
-        if (config.get(CONFIG_KEYS.Status.Idle.Check)) this.listeners.push(changeWindowState);
+        if (config.get("vscord.status.problems.enabled")) this.listeners.push(diagnosticsChange);
+        if (config.get("vscord.status.idle.check")) this.listeners.push(changeWindowState);
 
         this.listeners.push(fileSwitch, fileEdit, fileSelectionChanged, debugStart, debugEnd);
     }
@@ -115,11 +114,11 @@ export class RPCController {
         const config = getConfig();
         let userId = this.client.user?.id;
         if (!userId) return false;
-        if (isIdling && config.get(CONFIG_KEYS.Status.Idle.DisconnectOnIdle)) return (this.canSendActivity = false);
-        let whitelistEnabled = config.get(CONFIG_KEYS.App.WhitelistEnabled);
+        if (isIdling && config.get("vscord.status.idle.disconnectOnIdle")) return (this.canSendActivity = false);
+        let whitelistEnabled = config.get("vscord.app.whitelistEnabled");
         if (whitelistEnabled) {
-            let whitelist = config.get(CONFIG_KEYS.App.Whitelist);
-            if (config.get(CONFIG_KEYS.App.whitelistIsBlacklist))
+            let whitelist = config.get("vscord.app.whitelist");
+            if (config.get("vscord.app.whitelistIsBlacklist"))
                 if (whitelist!.includes(userId)) return (this.canSendActivity = false);
                 else return (this.canSendActivity = true);
             else if (!whitelist!.includes(userId)) return (this.canSendActivity = false);
@@ -132,18 +131,18 @@ export class RPCController {
 
         const config = getConfig();
 
-        if (config.get(CONFIG_KEYS.Status.Idle.Timeout) !== 0) {
+        if (config.get("vscord.status.idle.timeout") !== 0) {
             if (windowState.focused && this.idleTimeout) {
                 clearTimeout(this.idleTimeout);
                 await this.sendActivity();
-            } else if (config.get(CONFIG_KEYS.Status.Idle.Check)) {
+            } else if (config.get("vscord.status.idle.check")) {
                 this.idleTimeout = setTimeout(
                     async () => {
-                        if (!config.get(CONFIG_KEYS.Status.Idle.Check)) return;
+                        if (!config.get("vscord.status.idle.check")) return;
 
                         if (
-                            config.get(CONFIG_KEYS.Status.Idle.DisconnectOnIdle) &&
-                            config.get(CONFIG_KEYS.Status.Idle.ResetElapsedTime)
+                            config.get("vscord.status.idle.disconnectOnIdle") &&
+                            config.get("vscord.status.idle.resetElapsedTime")
                         ) {
                             delete this.state.startTimestamp;
                         }
@@ -153,7 +152,7 @@ export class RPCController {
                         this.activityThrottle.reset();
                         await this.sendActivity(false, true);
                     },
-                    config.get(CONFIG_KEYS.Status.Idle.Timeout)! * 1000
+                    config.get("vscord.status.idle.timeout")! * 1000
                 );
             }
         }

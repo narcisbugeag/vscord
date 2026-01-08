@@ -43,10 +43,10 @@
         "compile": "npm run check-types && npm run lint && node esbuild.js",
         "watch": "npm-run-all -p watch:*",
         "watch:esbuild": "node esbuild.js --watch",
-        "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+        "watch:tsc": "node configtypes.js && tsc --noEmit --watch --project tsconfig.json",
         "package": "npm run check-types && npm run lint && node esbuild.js --production",
         "pkg": "vsce package",
-        "check-types": "tsc --noEmit",
+        "check-types": "node configtypes.js && tsc --noEmit",
         "lint": "prettier . --check"
     },
     "dependencies": {
