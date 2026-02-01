@@ -898,6 +898,9 @@
         "/^ipynb$/": {
             "image": "jupyter"
         },
+        "/\\.kiro$/": {
+            "image": "kiro"
+        },
         "/^ks$/": {
             "image": "kag-script"
         },
