@@ -1,7 +1,7 @@
-const fs = require("fs"); // should be changed to import
-const path = require("path");
+import * as fs from "node:fs";
+import * as path from "node:path";
 
-const ROOT = __dirname; // import.meta.dirname
+const ROOT = import.meta.dirname;
 const PACKAGE_JSON = path.join(ROOT, "package.json");
 const OUT_FILE = path.join(ROOT, "src", "@types", "configtypes.d.ts");
 const OUT_FILE_REL = path.relative(ROOT, OUT_FILE);
@@ -9,7 +9,7 @@ const OUT_FILE_REL = path.relative(ROOT, OUT_FILE);
 const pkg = JSON.parse(fs.readFileSync(PACKAGE_JSON, "utf8"));
 const configurations = pkg.contributes?.configuration ?? [];
 
-function schemaTypeToTs(schema) {
+function schemaTypeToTs(schema, nesting = 1) {
     if (!schema) return "unknown";
 
     if (Array.isArray(schema.type)) {
@@ -33,11 +33,24 @@ function schemaTypeToTs(schema) {
             return needsParens ? `(${itemType})[]` : `${itemType}[]`;
         }
         case "object": {
+            if (!schema.additionalProperties && !schema.properties && !schema.propertyNames) {
+                return "Record<string, unknown>";
+            }
+            const spaceZero = "    ".repeat(nesting);
+            const space = spaceZero + "    ";
+            let obj = "{\n";
             if (schema.additionalProperties) {
                 const valueType = schemaTypeToTs(schema.additionalProperties);
-                return `{ [key: string]: ${valueType} }`;
+                obj += space + `[key: string]: ${valueType};\n`;
             }
-            return "Record<string, unknown>";
+            if (schema.properties) {
+                for (const prop in schema.properties) {
+                    const valueType = schemaTypeToTs(schema.properties[prop], nesting + 1);
+                    obj += space + `${prop}: ${valueType};\n`;
+                }
+            }
+            obj += spaceZero + "}";
+            return obj;
         }
         default:
             return "unknown";

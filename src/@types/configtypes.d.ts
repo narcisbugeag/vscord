@@ -63,6 +63,78 @@ export type ExtensionConfigGenerated = {
     "vscord.status.image.small.debugging.text": string;
     "vscord.status.image.small.notInFile.key": string;
     "vscord.status.image.small.notInFile.text": string;
+    "vscord.status.buttons": {
+        button1: {
+            enabled: boolean;
+            active: {
+                enabled: boolean;
+                label: string;
+                url: string;
+            };
+            inactive: {
+                enabled: boolean;
+                label: string;
+                url: string;
+            };
+            idle: {
+                enabled: boolean;
+                label: string;
+                url: string;
+            };
+            git: {
+                active: {
+                    enabled: boolean;
+                    label: string;
+                    url: string;
+                };
+                inactive: {
+                    enabled: boolean;
+                    label: string;
+                    url: string;
+                };
+                idle: {
+                    enabled: boolean;
+                    label: string;
+                    url: string;
+                };
+            };
+        };
+        button2: {
+            enabled: boolean;
+            active: {
+                enabled: boolean;
+                label: string;
+                url: string;
+            };
+            inactive: {
+                enabled: boolean;
+                label: string;
+                url: string;
+            };
+            idle: {
+                enabled: boolean;
+                label: string;
+                url: string;
+            };
+            git: {
+                active: {
+                    enabled: boolean;
+                    label: string;
+                    url: string;
+                };
+                inactive: {
+                    enabled: boolean;
+                    label: string;
+                    url: string;
+                };
+                idle: {
+                    enabled: boolean;
+                    label: string;
+                    url: string;
+                };
+            };
+        };
+    };
     "vscord.status.buttons.button1.enabled": boolean;
     "vscord.status.buttons.button1.active.enabled": boolean;
     "vscord.status.buttons.button1.active.label": string;
@@ -103,7 +175,9 @@ export type ExtensionConfigGenerated = {
     "vscord.status.buttons.button2.git.idle.url": string;
     "vscord.file.size.round": number;
     "vscord.file.size.spacer": string;
-    "vscord.behaviour.additionalFileMapping": { [key: string]: string };
+    "vscord.behaviour.additionalFileMapping": {
+        [key: string]: string;
+    };
     "vscord.behaviour.suppressNotifications": boolean;
     "vscord.behaviour.suppressRpcCouldNotConnect": boolean;
     "vscord.behaviour.statusBarAlignment": "Right" | "Left";
