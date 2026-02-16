@@ -292,106 +292,24 @@ async function createButton(
     currentButton: "Button1" | "Button2"
 ): Promise<GatewayActivityButton | undefined> {
     const config = getConfig();
-    const CONFIG_KEYS = {
-        Status: {
-            Buttons: {
-                Button1: {
-                    Git: {
-                        Idle: {
-                            Enabled:
-                                "vscord.status.buttons.button1.git.idle.enabled" satisfies keyof ExtensionConfigGenerated,
-                            Label: "vscord.status.buttons.button1.git.idle.label" satisfies keyof ExtensionConfigGenerated,
-                            Url: "vscord.status.buttons.button1.git.idle.url" satisfies keyof ExtensionConfigGenerated
-                        },
-                        Active: {
-                            Enabled:
-                                "vscord.status.buttons.button1.git.active.enabled" satisfies keyof ExtensionConfigGenerated,
-                            Label: "vscord.status.buttons.button1.git.active.label" satisfies keyof ExtensionConfigGenerated,
-                            Url: "vscord.status.buttons.button1.git.active.url" satisfies keyof ExtensionConfigGenerated
-                        },
-                        Inactive: {
-                            Enabled:
-                                "vscord.status.buttons.button1.git.inactive.enabled" satisfies keyof ExtensionConfigGenerated,
-                            Label: "vscord.status.buttons.button1.git.inactive.label" satisfies keyof ExtensionConfigGenerated,
-                            Url: "vscord.status.buttons.button1.git.inactive.url" satisfies keyof ExtensionConfigGenerated
-                        }
-                    },
-                    Idle: {
-                        Enabled: "vscord.status.buttons.button1.idle.enabled" satisfies keyof ExtensionConfigGenerated,
-                        Label: "vscord.status.buttons.button1.idle.label" satisfies keyof ExtensionConfigGenerated,
-                        Url: "vscord.status.buttons.button1.idle.url" satisfies keyof ExtensionConfigGenerated
-                    },
-                    Active: {
-                        Enabled:
-                            "vscord.status.buttons.button1.active.enabled" satisfies keyof ExtensionConfigGenerated,
-                        Label: "vscord.status.buttons.button1.active.label" satisfies keyof ExtensionConfigGenerated,
-                        Url: "vscord.status.buttons.button1.active.url" satisfies keyof ExtensionConfigGenerated
-                    },
-                    Inactive: {
-                        Enabled:
-                            "vscord.status.buttons.button1.inactive.enabled" satisfies keyof ExtensionConfigGenerated,
-                        Label: "vscord.status.buttons.button1.inactive.label" satisfies keyof ExtensionConfigGenerated,
-                        Url: "vscord.status.buttons.button1.inactive.url" satisfies keyof ExtensionConfigGenerated
-                    }
-                },
-                Button2: {
-                    Git: {
-                        Idle: {
-                            Enabled:
-                                "vscord.status.buttons.button2.git.idle.enabled" satisfies keyof ExtensionConfigGenerated,
-                            Label: "vscord.status.buttons.button2.git.idle.label" satisfies keyof ExtensionConfigGenerated,
-                            Url: "vscord.status.buttons.button2.git.idle.url" satisfies keyof ExtensionConfigGenerated
-                        },
-                        Active: {
-                            Enabled:
-                                "vscord.status.buttons.button2.git.active.enabled" satisfies keyof ExtensionConfigGenerated,
-                            Label: "vscord.status.buttons.button2.git.active.label" satisfies keyof ExtensionConfigGenerated,
-                            Url: "vscord.status.buttons.button2.git.active.url" satisfies keyof ExtensionConfigGenerated
-                        },
-                        Inactive: {
-                            Enabled:
-                                "vscord.status.buttons.button2.git.inactive.enabled" satisfies keyof ExtensionConfigGenerated,
-                            Label: "vscord.status.buttons.button2.git.inactive.label" satisfies keyof ExtensionConfigGenerated,
-                            Url: "vscord.status.buttons.button2.git.inactive.url" satisfies keyof ExtensionConfigGenerated
-                        }
-                    },
-                    Idle: {
-                        Enabled: "vscord.status.buttons.button2.idle.enabled" satisfies keyof ExtensionConfigGenerated,
-                        Label: "vscord.status.buttons.button2.idle.label" satisfies keyof ExtensionConfigGenerated,
-                        Url: "vscord.status.buttons.button2.idle.url" satisfies keyof ExtensionConfigGenerated
-                    },
-                    Active: {
-                        Enabled:
-                            "vscord.status.buttons.button2.active.enabled" satisfies keyof ExtensionConfigGenerated,
-                        Label: "vscord.status.buttons.button2.active.label" satisfies keyof ExtensionConfigGenerated,
-                        Url: "vscord.status.buttons.button2.active.url" satisfies keyof ExtensionConfigGenerated
-                    },
-                    Inactive: {
-                        Enabled:
-                            "vscord.status.buttons.button2.inactive.enabled" satisfies keyof ExtensionConfigGenerated,
-                        Label: "vscord.status.buttons.button2.inactive.label" satisfies keyof ExtensionConfigGenerated,
-                        Url: "vscord.status.buttons.button2.inactive.url" satisfies keyof ExtensionConfigGenerated
-                    }
-                }
-            }
-        }
-    };
-    const currentState = CONFIG_KEYS.Status.Buttons[currentButton];
-    const configKeyEnabled =
-        isGit && state != "Inactive" ? currentState.Git[state].Enabled : currentState[state].Enabled;
-    const enabled = config.get(configKeyEnabled);
+
+    const b = ({ Button1: "button1", Button2: "button2" } as const)[currentButton];
+    const g = isGit ? (".git" as const) : ("" as const);
+    const s = ({ Idle: "idle", Active: "active", Inactive: "inactive" } as const)[state];
+
+    const keyEnabled = `vscord.status.buttons.${b}${g}.${s}.enabled` as const satisfies keyof ExtensionConfigGenerated;
+    const keyLabel = `vscord.status.buttons.${b}${g}.${s}.label` as const satisfies keyof ExtensionConfigGenerated;
+    const keyUrl = `vscord.status.buttons.${b}${g}.${s}.url` as const satisfies keyof ExtensionConfigGenerated;
+
+    const enabled = config.get(keyEnabled);
     logInfo("[activity.ts] createButton(): enabled", enabled);
     if (!enabled) {
         return undefined;
     }
 
     return {
-        label: await replaceAllText(
-            config.get(isGit && state != "Inactive" ? currentState.Git[state].Label : currentState[state].Label)!
-        ),
-        url: await replaceAllText(
-            config.get(isGit && state != "Inactive" ? currentState.Git[state].Url : currentState[state].Url)!
-        )
+        label: await replaceAllText(config.get(keyLabel)!),
+        url: await replaceAllText(config.get(keyUrl)!)
     };
 }
 
