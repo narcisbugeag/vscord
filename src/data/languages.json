@@ -181,6 +181,10 @@
             "image": "wasm"
         },
         {
+            "language": "wikitext",
+            "image": "wikitext"
+        },
+        {
             "language": "objective-c",
             "image": "objective-c"
         },
@@ -879,6 +883,9 @@
         },
         "/\\.wa(sm|t|st)$/": {
             "image": "wasm"
+        },
+        "/\\.(wiki(text)?|mediawiki)$/": {
+            "image": "wikitext"
         },
         "/\\.x(ml|aml)$/": {
             "image": "xml"
