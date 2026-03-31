@@ -740,6 +740,9 @@
         "/\\.pde$/": {
             "image": "processing"
         },
+        "/\\.puml$|\\.pu$/": {
+            "image": "plantuml"
+        },
         "/\\.p(er)?l$|\\.al$|\\.p([hm]|(lx))$|\\.(psgi|xs)$|\\.pl6$|\\.[tp]6$|\\.6pl$|\\.(pm6|p6m)$|\\.6pm$|\\.nqp$|\\.p6l$|\\.pod6$|^Rexfile$/": {
             "image": "perl"
         },
