@@ -13,4 +13,5 @@ tsconfig.json
 .prettierrc
 .gitignore
 esbuild.js
+configtypes.js
 suckmyass
