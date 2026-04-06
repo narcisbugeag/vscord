@@ -134,6 +134,7 @@ export const activity = async (
     const folderExcluded =
         !!dataClass.editor &&
         isFolderExcluded(config.get(CONFIG_KEYS.Ignore.Folders) ?? [], dataClass.editor.document.uri.fsPath);
+    const isPrivateRepoContext = isGitExcluded || folderExcluded;
     const isNotInFile = !isWorkspaceExcluded && !dataClass.editor;
 
     const isDebugging = config.get(CONFIG_KEYS.Status.State.Debugging.Enabled) && !!debug.activeDebugSession;
@@ -151,6 +152,7 @@ export const activity = async (
               replaceGitInfo(replaceAppInfo(config.get(CONFIG_KEYS.Status.Problems.Text)!), isGitExcluded),
               isWorkspaceExcluded,
               folderExcluded,
+              isPrivateRepoContext,
               dataClass.editor?.document,
               dataClass.editor?.selection
           )
@@ -167,6 +169,7 @@ export const activity = async (
             replaced,
             isWorkspaceExcluded,
             folderExcluded,
+            isPrivateRepoContext,
             dataClass.editor?.document,
             dataClass.editor?.selection
         );
@@ -278,7 +281,7 @@ export const activity = async (
             break;
         }
     }
-    let buttons = await getPresenceButtons(isIdling, isGitExcluded, status, replaceAllText);
+    let buttons = await getPresenceButtons(isIdling, isPrivateRepoContext, status, replaceAllText);
     //
     presence.details = details;
     presence.state = state;
@@ -351,7 +354,7 @@ function buttonValidation(
 
 export const getPresenceButtons = async (
     isIdling: boolean,
-    isGitExcluded: boolean,
+    isPrivateRepoContext: boolean,
     status: CURRENT_STATUS,
     replaceAllText: (text: string) => Promise<string>
 ): Promise<GatewayActivityButton[]> => {
@@ -368,7 +371,7 @@ export const getPresenceButtons = async (
           ? "Active"
           : "Inactive";
     if ((!button1Enabled && !button2Enabled) || !state || !hasGit) return [];
-    const isGit = !isGitExcluded;
+    const isGit = !isPrivateRepoContext;
     logInfo("[activity.ts] repo button1#gitRemoteUrl:", dataClass.gitRemoteUrl, "hasGit", hasGit, "isGit", isGit);
     let button1 = buttonValidation(await createButton(replaceAllText, state, isGit, "Button1"), "Button1");
     let button2 = buttonValidation(await createButton(replaceAllText, state, isGit, "Button2"), "Button2");
@@ -469,6 +472,7 @@ export const replaceFileInfo = async (
     text: string,
     workspaceExcluded = false,
     folderExcluded = false,
+    privateRepoContext = false,
     document?: TextDocument,
     selection?: Selection
 ): Promise<string> => {
@@ -489,6 +493,7 @@ export const replaceFileInfo = async (
     let fileName = dataClass.fileName ?? FAKE_EMPTY;
     let folderAndFile = dataClass.folderAndFile ?? FAKE_EMPTY;
     let dirName = dataClass.dirName ?? FAKE_EMPTY;
+    let fileExtension = dataClass.fileExtension ?? FAKE_EMPTY;
     const fileIcon = dataClass.editor ? resolveLangName(dataClass.editor.document) : "text";
     const fileSize = await getFileSize(config, dataClass);
     let relativeFilepath: string = FAKE_EMPTY;
@@ -519,13 +524,27 @@ export const replaceFileInfo = async (
         relativeFilepath = FAKE_EMPTY;
     }
 
+    if (privateRepoContext) {
+        const normalizedExtension = fileExtension.replace(/^\./, "");
+
+        fileName = FAKE_EMPTY;
+        folderAndFile = FAKE_EMPTY;
+        dirName = "Private Repo";
+        workspaceFolderName = "Private Space";
+        workspaceName = "Private Space";
+        workspaceAndFolder = "Private Space";
+        fullDirectoryName = "Private Repo";
+        relativeFilepath = FAKE_EMPTY;
+        fileExtension = normalizedExtension ? `a ${normalizedExtension} file` : FAKE_EMPTY;
+    }
+
     const totalProblems = config.get(CONFIG_KEYS.Status.Problems.Enabled)
         ? getTotalProblems(config.get(CONFIG_KEYS.Status.Problems.countedSeverities)!)
         : 0;
 
     const replaceMap = new Map([
         ["{file_name}", fileName],
-        ["{file_extension}", dataClass.fileExtension ?? FAKE_EMPTY],
+        ["{file_extension}", fileExtension],
         ["{file_size}", fileSize?.toLocaleString() ?? FAKE_EMPTY],
         ["{folder_and_file}", folderAndFile],
         ["{relative_file_path}", relativeFilepath],
