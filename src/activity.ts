@@ -5,6 +5,7 @@ import { CONFIG_KEYS, FAKE_EMPTY } from "./constants";
 import { getFileSize } from "./helpers/getFileSize";
 import { isExcluded } from "./helpers/isExcluded";
 import { isFolderExcluded } from "./helpers/isFolderExcluded";
+import { getRepoAccessibility } from "./helpers/repoAccessibility";
 import { isObject } from "./helpers/isObject";
 import { getConfig } from "./config";
 import { logInfo } from "./logger";
@@ -134,7 +135,14 @@ export const activity = async (
     const folderExcluded =
         !!dataClass.editor &&
         isFolderExcluded(config.get(CONFIG_KEYS.Ignore.Folders) ?? [], dataClass.editor.document.uri.fsPath);
-    const isPrivateRepoContext = isGitExcluded || folderExcluded;
+    const hideInaccessibleRepositories = config.get(CONFIG_KEYS.Ignore.HideInaccessibleRepositories) ?? false;
+    const repoAccessibility =
+        hideInaccessibleRepositories && dataClass.gitRemoteUrl
+            ? await getRepoAccessibility(dataClass.gitRepoPath, dataClass.gitRemoteUrl)
+            : "unknown";
+    const repoAccessibilityHidden = repoAccessibility === "hidden";
+    const hideGitInPresence = isGitExcluded || repoAccessibilityHidden;
+    const isPrivateRepoContext = folderExcluded || hideGitInPresence;
     const isNotInFile = !isWorkspaceExcluded && !dataClass.editor;
 
     const isDebugging = config.get(CONFIG_KEYS.Status.State.Debugging.Enabled) && !!debug.activeDebugSession;
@@ -149,7 +157,7 @@ export const activity = async (
 
     const PROBLEMS = config.get(CONFIG_KEYS.Status.Problems.Enabled)
         ? await replaceFileInfo(
-              replaceGitInfo(replaceAppInfo(config.get(CONFIG_KEYS.Status.Problems.Text)!), isGitExcluded),
+              replaceGitInfo(replaceAppInfo(config.get(CONFIG_KEYS.Status.Problems.Text)!), hideGitInPresence),
               isWorkspaceExcluded,
               folderExcluded,
               isPrivateRepoContext,
@@ -164,7 +172,7 @@ export const activity = async (
             replaced = await replaceForPrivacyMode(replaced);
         }
         replaced = replaceAppInfo(replaced);
-        replaced = replaceGitInfo(replaced, isGitExcluded);
+        replaced = replaceGitInfo(replaced, hideGitInPresence);
         replaced = await replaceFileInfo(
             replaced,
             isWorkspaceExcluded,

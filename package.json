@@ -308,6 +308,11 @@
                         },
                         "default": [],
                         "description": "A list of folder name / path patterns (regex) to ignore. Matched against the full file path (forward-slash normalized). File and directory names will be masked in Discord presence."
+                    },
+                    "vscord.ignore.hideInaccessibleRepositories": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Treat repositories that are not publicly accessible by anonymous HTTP request as private and mask their details in Discord presence."
                     }
                 }
             },

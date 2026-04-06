@@ -129,6 +129,7 @@ export interface ExtensionConfigurationType {
     "ignore.organizations": Array<string>;
     "ignore.gitHosts": Array<string>;
     "ignore.folders": Array<string>;
+    "ignore.hideInaccessibleRepositories": boolean;
     "file.size.humanReadable": boolean;
     "file.size.standard": FileSizeStandard;
     "file.size.round": number;

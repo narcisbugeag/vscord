@@ -189,7 +189,8 @@ export const CONFIG_KEYS = {
         Repositories: "ignore.repositories" as const,
         Organizations: "ignore.organizations" as const,
         GitHosts: "ignore.gitHosts" as const,
-        Folders: "ignore.folders" as const
+        Folders: "ignore.folders" as const,
+        HideInaccessibleRepositories: "ignore.hideInaccessibleRepositories" as const
     } as const,
     File: {
         Size: {
