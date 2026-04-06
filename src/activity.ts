@@ -134,8 +134,6 @@ export const activity = async (
     const folderExcluded =
         !!dataClass.editor &&
         isFolderExcluded(config.get(CONFIG_KEYS.Ignore.Folders) ?? [], dataClass.editor.document.uri.fsPath);
-    if (folderExcluded) isWorkspaceExcluded = true;
-
     const isNotInFile = !isWorkspaceExcluded && !dataClass.editor;
 
     const isDebugging = config.get(CONFIG_KEYS.Status.State.Debugging.Enabled) && !!debug.activeDebugSession;
@@ -152,6 +150,7 @@ export const activity = async (
         ? await replaceFileInfo(
               replaceGitInfo(replaceAppInfo(config.get(CONFIG_KEYS.Status.Problems.Text)!), isGitExcluded),
               isWorkspaceExcluded,
+              folderExcluded,
               dataClass.editor?.document,
               dataClass.editor?.selection
           )
@@ -167,6 +166,7 @@ export const activity = async (
         replaced = await replaceFileInfo(
             replaced,
             isWorkspaceExcluded,
+            folderExcluded,
             dataClass.editor?.document,
             dataClass.editor?.selection
         );
@@ -187,7 +187,7 @@ export const activity = async (
         return replaced;
     };
 
-    let workspaceExcludedText = "No workspace ignore text provided.";
+    let workspaceExcludedText = "Private Project";
     const ignoreWorkspacesText = config.get(CONFIG_KEYS.Ignore.WorkspacesText)!;
 
     if (isObject(ignoreWorkspacesText)) {
@@ -468,7 +468,8 @@ export const replaceGitInfo = (text: string, excluded = false): string => {
 
 export const replaceFileInfo = async (
     text: string,
-    excluded = false,
+    workspaceExcluded = false,
+    folderExcluded = false,
     document?: TextDocument,
     selection?: Selection
 ): Promise<string> => {
@@ -493,7 +494,7 @@ export const replaceFileInfo = async (
     const fileSize = await getFileSize(config, dataClass);
     let relativeFilepath: string = FAKE_EMPTY;
 
-    if (dataClass.editor && dataClass.workspaceName && !excluded) {
+    if (dataClass.editor && dataClass.workspaceName && !workspaceExcluded && !folderExcluded) {
         const name = dataClass.workspaceName;
         relativeFilepath = workspace.asRelativePath(dataClass.editor.document.fileName);
         const relativePath = workspace.asRelativePath(dataClass.editor.document.fileName).split(sep);
@@ -502,13 +503,19 @@ export const replaceFileInfo = async (
         fullDirectoryName = `${name}${sep}${relativePath.join(sep)}`;
     }
 
-    if (excluded) {
+    if (workspaceExcluded) {
         fileName = FAKE_EMPTY;
         folderAndFile = FAKE_EMPTY;
         dirName = FAKE_EMPTY;
         workspaceFolderName = FAKE_EMPTY;
         workspaceName = FAKE_EMPTY;
         workspaceAndFolder = FAKE_EMPTY;
+        fullDirectoryName = FAKE_EMPTY;
+        relativeFilepath = FAKE_EMPTY;
+    } else if (folderExcluded) {
+        fileName = FAKE_EMPTY;
+        folderAndFile = FAKE_EMPTY;
+        dirName = FAKE_EMPTY;
         fullDirectoryName = FAKE_EMPTY;
         relativeFilepath = FAKE_EMPTY;
     }

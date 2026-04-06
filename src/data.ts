@@ -62,6 +62,7 @@ export class Data implements Disposable {
                 if (e) this.debug(`root(): window.onDidChangeActiveTextEditor: got URI '${e.document.uri.scheme}'`);
 
                 this.editor = e;
+                this.updateGitInfo();
             })
         );
     }
@@ -234,8 +235,8 @@ export class Data implements Disposable {
     private repo(api: GitApi): Repository | undefined {
         const repos = api.repositories;
 
-        if (window.activeTextEditor) {
-            const _file = parse(window.activeTextEditor.document.uri.fsPath);
+        if (this.editor) {
+            const _file = parse(this.editor.document.uri.fsPath);
             return extractRepo(repos, _file.dir);
         }
 

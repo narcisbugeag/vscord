@@ -111,7 +111,7 @@ The following variables will be replaced with the respective value in custom str
 
 `vscord.ignore.folders` is a list of **regular expression** patterns. Each pattern is tested against the active file’s full path after normalizing `\` to `/`.
 
-When any pattern matches, the extension treats the file like a workspace-ignored context: **details/state** use your workspace ignore text, and placeholders such as `{file_name}`, `{directory_name}`, `{folder_and_file}`, `{relative_file_path}`, and `{full_directory_name}` are cleared so names do not appear in Discord. **`{file_extension}`** and **`{lang}`** (language icon keys) still resolve so the activity can show the file type without exposing paths.
+When any pattern matches, placeholders such as `{file_name}`, `{directory_name}`, `{folder_and_file}`, `{relative_file_path}`, and `{full_directory_name}` are cleared so names do not appear in Discord; **`{file_extension}`** and **`{lang}`** (language icon keys) still resolve. **Workspace-level ignore** (`vscord.ignore.workspaces`) is unchanged and still replaces **details/state** with `vscord.ignore.workspacesText` (e.g. “Private Project”) for the whole workspace.
 
 - **Scopes:** User, Workspace, and Workspace Folder (same merge rules as other VS Code settings).
 - **Case sensitivity:** case-insensitive on Windows and macOS; case-sensitive on Linux.
