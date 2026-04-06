@@ -358,19 +358,18 @@ export const getPresenceButtons = async (
     const config = getConfig();
     let button1Enabled = config.get(CONFIG_KEYS.Status.Buttons.Button1.Enabled)!;
     let button2Enabled = config.get(CONFIG_KEYS.Status.Buttons.Button2.Enabled)!;
+    const hasGit = !!dataClass.gitRemoteUrl;
     let state: "Idle" | "Active" | "Inactive" | undefined = isIdling
         ? "Idle"
-        : isGitExcluded
-          ? undefined
-          : status == CURRENT_STATUS.EDITING ||
-              status == CURRENT_STATUS.VIEWING ||
-              status == CURRENT_STATUS.NOT_IN_FILE ||
-              status == CURRENT_STATUS.DEBUGGING
-            ? "Active"
-            : "Inactive";
-    if ((!button1Enabled && !button2Enabled) || !state) return [];
-    let isGit = !isGitExcluded && !!dataClass.gitRemoteUrl;
-    logInfo("[activity.ts] repo button1#gitRemoteUrl:", dataClass.gitRemoteUrl, "isGit", isGit);
+        : status == CURRENT_STATUS.EDITING ||
+            status == CURRENT_STATUS.VIEWING ||
+            status == CURRENT_STATUS.NOT_IN_FILE ||
+            status == CURRENT_STATUS.DEBUGGING
+          ? "Active"
+          : "Inactive";
+    if ((!button1Enabled && !button2Enabled) || !state || !hasGit) return [];
+    const isGit = !isGitExcluded;
+    logInfo("[activity.ts] repo button1#gitRemoteUrl:", dataClass.gitRemoteUrl, "hasGit", hasGit, "isGit", isGit);
     let button1 = buttonValidation(await createButton(replaceAllText, state, isGit, "Button1"), "Button1");
     let button2 = buttonValidation(await createButton(replaceAllText, state, isGit, "Button2"), "Button2");
     logInfo("[activity.ts] getPresenceButtons button1:", state, button1);
