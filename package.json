@@ -299,6 +299,15 @@
                         },
                         "default": [],
                         "description": "A list of git host to ignore."
+                    },
+                    "vscord.ignore.folders": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
+                        "default": [],
+                        "description": "A list of folder name / path patterns (regex) to ignore. Matched against the full file path (forward-slash normalized). File and directory names will be masked in Discord presence."
                     }
                 }
             },

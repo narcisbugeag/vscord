@@ -4,6 +4,7 @@ import { type SetActivity } from "@xhayper/discord-rpc";
 import { CONFIG_KEYS, FAKE_EMPTY } from "./constants";
 import { getFileSize } from "./helpers/getFileSize";
 import { isExcluded } from "./helpers/isExcluded";
+import { isFolderExcluded } from "./helpers/isFolderExcluded";
 import { isObject } from "./helpers/isObject";
 import { getConfig } from "./config";
 import { logInfo } from "./logger";
@@ -129,6 +130,11 @@ export const activity = async (
         isWorkspaceExcluded =
             dataClass.workspaceName !== undefined &&
             isExcluded(config.get(CONFIG_KEYS.Ignore.Workspaces)!, dataClass.workspaceName);
+
+    const folderExcluded =
+        !!dataClass.editor &&
+        isFolderExcluded(config.get(CONFIG_KEYS.Ignore.Folders) ?? [], dataClass.editor.document.uri.fsPath);
+    if (folderExcluded) isWorkspaceExcluded = true;
 
     const isNotInFile = !isWorkspaceExcluded && !dataClass.editor;
 
@@ -480,6 +486,9 @@ export const replaceFileInfo = async (
             : workspaceAndFolder;
 
     let fullDirectoryName: string = FAKE_EMPTY;
+    let fileName = dataClass.fileName ?? FAKE_EMPTY;
+    let folderAndFile = dataClass.folderAndFile ?? FAKE_EMPTY;
+    let dirName = dataClass.dirName ?? FAKE_EMPTY;
     const fileIcon = dataClass.editor ? resolveLangName(dataClass.editor.document) : "text";
     const fileSize = await getFileSize(config, dataClass);
     let relativeFilepath: string = FAKE_EMPTY;
@@ -494,6 +503,9 @@ export const replaceFileInfo = async (
     }
 
     if (excluded) {
+        fileName = FAKE_EMPTY;
+        folderAndFile = FAKE_EMPTY;
+        dirName = FAKE_EMPTY;
         workspaceFolderName = FAKE_EMPTY;
         workspaceName = FAKE_EMPTY;
         workspaceAndFolder = FAKE_EMPTY;
@@ -506,12 +518,12 @@ export const replaceFileInfo = async (
         : 0;
 
     const replaceMap = new Map([
-        ["{file_name}", dataClass.fileName ?? FAKE_EMPTY],
+        ["{file_name}", fileName],
         ["{file_extension}", dataClass.fileExtension ?? FAKE_EMPTY],
         ["{file_size}", fileSize?.toLocaleString() ?? FAKE_EMPTY],
-        ["{folder_and_file}", dataClass.folderAndFile ?? FAKE_EMPTY],
+        ["{folder_and_file}", folderAndFile],
         ["{relative_file_path}", relativeFilepath],
-        ["{directory_name}", dataClass.dirName ?? FAKE_EMPTY],
+        ["{directory_name}", dirName],
         ["{full_directory_name}", fullDirectoryName],
         ["{workspace}", workspaceName],
         ["{workspace_folder}", workspaceFolderName],

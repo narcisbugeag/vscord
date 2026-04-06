@@ -188,7 +188,8 @@ export const CONFIG_KEYS = {
         WorkspacesText: "ignore.workspacesText" as const,
         Repositories: "ignore.repositories" as const,
         Organizations: "ignore.organizations" as const,
-        GitHosts: "ignore.gitHosts" as const
+        GitHosts: "ignore.gitHosts" as const,
+        Folders: "ignore.folders" as const
     } as const,
     File: {
         Size: {
